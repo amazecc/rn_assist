@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "start": "react-native start --reset-cache",
+    "ios": "react-native run-ios --simulator \"iPhone X\"",
+    "android": "react-native run-android"
   },
   "dependencies": {
     "react": "16.8.3",
