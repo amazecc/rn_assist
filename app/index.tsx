@@ -1,17 +1,36 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 
-import { Test } from "component";
+import { Overlay } from "component";
 
-interface Props {}
-export default class App extends React.Component<Props> {
+interface State {
+    showOverlay: boolean;
+}
+
+export default class App extends React.Component<any, State> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            showOverlay: true
+        };
+    }
+
+    showOverlay = () => this.setState({ showOverlay: true });
+
+    hideOverlay = () => this.setState({ showOverlay: false });
+
     render() {
+        const { showOverlay } = this.state;
         return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>Welcome to React Native!</Text>
-                <Text style={styles.instructions}>To get started, edit App.js</Text>
-                <Test />
-            </View>
+            <React.Fragment>
+                <View style={styles.container}>
+                    <Button title="show overlay" onPress={this.showOverlay} />
+                </View>
+
+                <Overlay visible={showOverlay} onClose={this.hideOverlay} style={{ justifyContent: "center", alignContent: "center" }}>
+                    <Button title="close overlay" onPress={this.hideOverlay} />
+                </Overlay>
+            </React.Fragment>
         );
     }
 }
@@ -19,18 +38,8 @@ export default class App extends React.Component<Props> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "#F5FCFF"
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: "center",
-        margin: 10
-    },
-    instructions: {
-        textAlign: "center",
-        color: "#333333",
-        marginBottom: 5
     }
 });
