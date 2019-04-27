@@ -1,1 +1,2 @@
-export {Overlay} from "./overlay/overlay";
+export { Overlay } from "./overlay/Overlay";
+export { OverlayManager } from "./overlay/OverlayManager";

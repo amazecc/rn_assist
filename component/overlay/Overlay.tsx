@@ -6,15 +6,14 @@ import { commonStyle } from "component/common";
 
 export interface OverlayProps {
     visible: boolean;
-    onClose: () => void;
+    onTriggerHide: () => void;
+    onHide: () => void;
     maskClosable?: boolean;
     style?: StyleProp<ViewStyle>;
 }
 
-interface Props extends OverlayProps {}
-
-export class Overlay extends React.PureComponent<Props> {
-    public static defaultProps: PickOptional<Props> = {
+export class Overlay extends React.PureComponent<OverlayProps> {
+    public static defaultProps: PickOptional<OverlayProps> = {
         maskClosable: true
     };
 
@@ -23,7 +22,7 @@ export class Overlay extends React.PureComponent<Props> {
     componentDidMount() {
         if (this.props.maskClosable) {
             this.backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
-                this.props.onClose();
+                this.props.onTriggerHide();
                 return true;
             });
         }
@@ -36,10 +35,10 @@ export class Overlay extends React.PureComponent<Props> {
     }
 
     render() {
-        const { visible, onClose, style, maskClosable, children } = this.props;
+        const { visible, onHide, onTriggerHide, style, maskClosable, children } = this.props;
         return (
-            <AnimatedView visible={visible} onHide={onClose} style={styles.overlay}>
-                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onClose : undefined} style={[commonStyle.flex1, style]}>
+            <AnimatedView visible={visible} onHide={onHide} style={styles.overlay}>
+                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[commonStyle.flex1, style]}>
                     {children}
                 </TouchableOpacity>
             </AnimatedView>

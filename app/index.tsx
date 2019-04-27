@@ -1,10 +1,10 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 
-import { Overlay } from "component";
+import { Overlay, OverlayManager } from "component";
+import { commonStyle } from "component/common";
 
 interface State {
-    showOverlay: boolean;
 }
 
 export default class App extends React.Component<any, State> {
@@ -19,18 +19,24 @@ export default class App extends React.Component<any, State> {
 
     hideOverlay = () => this.setState({ showOverlay: false });
 
-    render() {
-        const { showOverlay } = this.state;
-        return (
-            <React.Fragment>
-                <View style={styles.container}>
-                    <Button title="show overlay" onPress={this.showOverlay} />
-                </View>
+    removeOverlay = () => this.setState({ showOverlay: null });
 
-                <Overlay visible={showOverlay} onClose={this.hideOverlay} style={{ justifyContent: "center", alignContent: "center" }}>
-                    <Button title="close overlay" onPress={this.hideOverlay} />
-                </Overlay>
-            </React.Fragment>
+    showModal = () => {
+        const { destroy } = OverlayManager.pushModal(
+            <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+                <Button title="close Modal" onPress={OverlayManager.pop} />
+            </View>
+        );
+
+        setTimeout(destroy, 2000);
+    };
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <Button title="show Modal" onPress={this.showModal} />
+                <OverlayManager />
+            </View>
         );
     }
 }

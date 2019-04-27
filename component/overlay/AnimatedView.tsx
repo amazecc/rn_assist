@@ -50,7 +50,7 @@ export class AnimatedView extends React.PureComponent<Props, State> {
     render() {
         const { style, visible, animations, duration, children } = this.props;
         return (
-            <Animatable.View useNativeDriver duration={duration} onAnimationEnd={this.onAnimationEnd} animation={visible ? animations![0] : animations![1]} style={style}>
+            <Animatable.View useNativeDriver pointerEvents="box-none" duration={duration} onAnimationEnd={this.onAnimationEnd} animation={visible ? animations![0] : animations![1]} style={style}>
                 {children}
             </Animatable.View>
         );
