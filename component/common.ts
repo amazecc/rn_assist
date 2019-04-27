@@ -3,11 +3,6 @@ import { StyleSheet, Platform } from "react-native";
 export const commonStyle = StyleSheet.create({
     flex1: { flex: 1 },
     center: { justifyContent: "center", alignItems: "center" },
-    mask: {
-        flex: 1,
-        backgroundColor: "#00000080"
-    },
-    modal: { justifyContent: "center", alignItems: "center" },
     shadow: Platform.select({
         ios: {
             shadowColor: "#000000",

@@ -26,13 +26,13 @@ export class OverlayManager extends React.PureComponent<any, State> {
     public static pushModal(children: React.ReactElement, props?: ModalConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
-        const newItem = instance.createItem(id, Overlay, children, {
+        const newItem = instance.createItem(id, children, Overlay, {
             ...props,
             visible: true,
             maskClosable: true,
             style: commonStyle.center,
-            onHide: () => OverlayManager.getInstance().destroy("modal", id),
-            onTriggerHide: () => OverlayManager.getInstance().triggerHideItem("modal", id)
+            onHide: () => instance.destroy("modal", id),
+            onTriggerHide: () => instance.triggerHideItem("modal", id)
         });
         instance.setState(prevState => ({
             modals: [...prevState.modals, newItem]
@@ -46,12 +46,12 @@ export class OverlayManager extends React.PureComponent<any, State> {
     public static pushToast(children: React.ReactNode, props?: ToastConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
-        const newItem = instance.createItem(id, Toast, children, {
+        const newItem = instance.createItem(id, children, Toast, {
             ...props,
             visible: true,
             maskClosable: false,
-            onHide: () => OverlayManager.getInstance().destroy("toast", id),
-            onTriggerHide: () => OverlayManager.getInstance().triggerHideItem("toast", id)
+            onHide: () => instance.destroy("toast", id),
+            onTriggerHide: () => instance.triggerHideItem("toast", id)
         });
         instance.setState(prevState => ({
             toasts: [...prevState.toasts, newItem]
@@ -89,7 +89,7 @@ export class OverlayManager extends React.PureComponent<any, State> {
         instance = null;
     }
 
-    createItem<T extends OverlayProps>(id: string, component: React.ComponentType<T>, children: React.ReactNode, props: T): Item {
+    createItem<T extends OverlayProps>(id: string, children: React.ReactNode, component: React.ComponentType<T>, props: T): Item {
         return {
             id,
             children,

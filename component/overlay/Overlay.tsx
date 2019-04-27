@@ -36,7 +36,7 @@ export class Overlay extends React.PureComponent<OverlayProps> {
         const { onTriggerHide, style, maskClosable, children, ...animatedViewProps } = this.props;
         return (
             <AnimatedView {...animatedViewProps} style={styles.overlay}>
-                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[commonStyle.mask, style]}>
+                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[styles.mask, style]}>
                     <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
                 </TouchableOpacity>
             </AnimatedView>
@@ -48,5 +48,9 @@ const styles = StyleSheet.create({
     overlay: {
         flex: 1,
         ...StyleSheet.absoluteFillObject
+    },
+    mask: {
+        flex: 1,
+        backgroundColor: "#00000080"
     }
 });
