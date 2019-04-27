@@ -1,13 +1,11 @@
 import * as React from "react";
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler } from "react-native";
-import { AnimatedView } from "./AnimatedView";
+import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, TouchableWithoutFeedback } from "react-native";
+import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
 import { PickOptional } from "component/type";
 import { commonStyle } from "component/common";
 
-export interface OverlayProps {
-    visible: boolean;
+export interface OverlayProps extends AnimatedViewProps {
     onTriggerHide: () => void;
-    onHide: () => void;
     maskClosable?: boolean;
     style?: StyleProp<ViewStyle>;
 }
@@ -35,11 +33,11 @@ export class Overlay extends React.PureComponent<OverlayProps> {
     }
 
     render() {
-        const { visible, onHide, onTriggerHide, style, maskClosable, children } = this.props;
+        const { onTriggerHide, style, maskClosable, children, ...animatedViewProps } = this.props;
         return (
-            <AnimatedView visible={visible} onHide={onHide} style={styles.overlay}>
-                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[commonStyle.flex1, style]}>
-                    {children}
+            <AnimatedView {...animatedViewProps} style={styles.overlay}>
+                <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[commonStyle.mask, style]}>
+                    <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
                 </TouchableOpacity>
             </AnimatedView>
         );
@@ -49,7 +47,6 @@ export class Overlay extends React.PureComponent<OverlayProps> {
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: "#00000080",
         ...StyleSheet.absoluteFillObject
     }
 });
