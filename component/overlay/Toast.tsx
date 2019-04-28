@@ -8,6 +8,7 @@ export interface ToastProps extends Omit<OverlayProps, "style"> {
     delay?: number;
     containerStyle?: StyleProp<ViewStyle>;
     textStyle?: StyleProp<TextStyle>;
+    children?: React.ReactElement | React.ReactText;
 }
 
 export class Toast extends React.PureComponent<ToastProps> {
@@ -28,10 +29,9 @@ export class Toast extends React.PureComponent<ToastProps> {
 
     render() {
         const { children, delay, containerStyle, textStyle, ...overProps } = this.props;
-        const isTextType = typeof children === "string" || typeof children === "number";
         return (
             <Overlay {...overProps} style={[styles.container, containerStyle]}>
-                {isTextType ? <Text style={[styles.text, textStyle]}>{children}</Text> : children}
+                {React.isValidElement(children) ? children : <Text style={[styles.text, textStyle]}>{children}</Text>}
             </Overlay>
         );
     }

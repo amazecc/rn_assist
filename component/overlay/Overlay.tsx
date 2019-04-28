@@ -2,12 +2,13 @@ import * as React from "react";
 import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, TouchableWithoutFeedback } from "react-native";
 import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
 import { PickOptional } from "component/type";
-import { commonStyle } from "component/common";
+import { CloseOverlayProps } from "./register";
 
 export interface OverlayProps extends AnimatedViewProps {
     onTriggerHide: () => void;
     maskClosable?: boolean;
     style?: StyleProp<ViewStyle>;
+    children?: React.ReactElement<CloseOverlayProps> | React.ReactText;
 }
 
 export class Overlay extends React.PureComponent<OverlayProps> {
@@ -37,7 +38,7 @@ export class Overlay extends React.PureComponent<OverlayProps> {
         return (
             <AnimatedView {...animatedViewProps} style={styles.overlay}>
                 <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[styles.mask, style]}>
-                    <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback>{React.isValidElement(children) ? React.cloneElement(children, { onTriggerHide }) : children}</TouchableWithoutFeedback>
                 </TouchableOpacity>
             </AnimatedView>
         );

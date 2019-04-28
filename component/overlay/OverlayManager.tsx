@@ -10,7 +10,6 @@ type OverlayType = "modal" | "toast";
 
 interface Item {
     id: string;
-    children: React.ReactNode;
     props: OverlayProps;
     component: React.ComponentType<any>; // Modal
 }
@@ -26,32 +25,30 @@ export class OverlayManager extends React.PureComponent<any, State> {
     public static pushModal(children: React.ReactElement, props?: ModalConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
-        const newItem = instance.createItem(id, children, Overlay, {
+        const newItem = instance.createItem(id, Overlay, {
             ...props,
             visible: true,
             maskClosable: true,
             style: commonStyle.center,
             onHide: () => instance.destroy("modal", id),
-            onTriggerHide: () => instance.triggerHideItem("modal", id)
+            onTriggerHide: () => instance.triggerHideItem("modal", id),
+            children
         });
         instance.setState(prevState => ({
             modals: [...prevState.modals, newItem]
         }));
-
-        return {
-            destroy: newItem.props.onTriggerHide
-        };
     }
 
-    public static pushToast(children: React.ReactNode, props?: ToastConfig) {
+    public static pushToast(children: React.ReactElement | React.ReactText, props?: ToastConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
-        const newItem = instance.createItem(id, children, Toast, {
+        const newItem = instance.createItem(id, Toast, {
             ...props,
             visible: true,
             maskClosable: false,
             onHide: () => instance.destroy("toast", id),
-            onTriggerHide: () => instance.triggerHideItem("toast", id)
+            onTriggerHide: () => instance.triggerHideItem("toast", id),
+            children
         });
         instance.setState(prevState => ({
             toasts: [...prevState.toasts, newItem]
@@ -89,10 +86,9 @@ export class OverlayManager extends React.PureComponent<any, State> {
         instance = null;
     }
 
-    createItem<T extends OverlayProps>(id: string, children: React.ReactNode, component: React.ComponentType<T>, props: T): Item {
+    createItem<T extends OverlayProps>(id: string, component: React.ComponentType<T>, props: T): Item {
         return {
             id,
-            children,
             props,
             component
         };
@@ -132,9 +128,9 @@ export class OverlayManager extends React.PureComponent<any, State> {
         return (
             <React.Fragment>
                 {modals.map(_ => (
-                    <_.component key={_.id} {..._.props} children={_.children} />
+                    <_.component key={_.id} {..._.props} />
                 ))}
-                {currentToast && <currentToast.component key={currentToast.id} {...currentToast.props} children={currentToast.children} />}
+                {currentToast && <currentToast.component key={currentToast.id} {...currentToast.props} />}
             </React.Fragment>
         );
     }

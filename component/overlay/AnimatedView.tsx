@@ -7,7 +7,6 @@ export interface AnimatedViewProps {
     visible: boolean;
     onHide: () => void;
     animations?: [Animatable.Animation, Animatable.Animation];
-    onShow?: () => void;
     duration?: number;
     style?: StyleProp<ViewStyle>;
 }
@@ -37,13 +36,8 @@ export class AnimatedView extends React.PureComponent<AnimatedViewProps, State> 
     }
 
     onAnimationEnd = () => {
-        const { onHide, onShow } = this.props;
-        if (this.state.visible) {
-            if (onShow) {
-                onShow();
-            }
-        } else {
-            onHide();
+        if (!this.state.visible) {
+            this.props.onHide();
         }
     };
 
