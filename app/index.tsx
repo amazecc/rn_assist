@@ -11,7 +11,7 @@ interface ModalTestProps extends CloseOverlayProps {
 
 const ModalTest = (props: ModalTestProps) => (
     <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
-        <Button title={`close Modal ${props.a}`} onPress={props.onTriggerHide!} />
+        <Button title={`close Modal ${props.a}`} onPress={props.onTriggerHide} />
     </View>
 );
 
@@ -33,6 +33,7 @@ export default class App extends React.Component<any, State> {
 
     showModal = () => {
         const A = <ModalTestWithClose a={2000} />;
+        // TODO： 使用函数组件，modal 无法控制事件冒泡
         Modal.push(A);
     };
 

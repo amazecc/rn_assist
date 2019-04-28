@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, TouchableWithoutFeedback } from "react-native";
+import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, TouchableWithoutFeedback, Alert } from "react-native";
 import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
 import { PickOptional } from "component/type";
 import { CloseOverlayProps } from "./register";
