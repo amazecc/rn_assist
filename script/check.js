@@ -1,7 +1,7 @@
-import { spawnSync } from "child_process";
-import "colors";
+const spawnSync = require("child_process").spawnSync;
+require("colors");
 
-function runShell(command: string) {
+function runShell(command) {
     const arrayCommand = command.split(" ");
     const result = spawnSync(arrayCommand[0], arrayCommand.slice(1), { stdio: "inherit" });
     if (result.error) {

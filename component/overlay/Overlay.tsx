@@ -1,14 +1,18 @@
 import * as React from "react";
-import { TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, TouchableWithoutFeedback, Alert } from "react-native";
+import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler } from "react-native";
 import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
 import { PickOptional } from "component/type";
 import { CloseOverlayProps } from "./register";
 
 export interface OverlayProps extends AnimatedViewProps {
-    onTriggerHide: () => void;
+    // private
+    onTriggerHide: () => void; // used in OverlayManager
+    // default
+    children?: React.ReactElement<CloseOverlayProps> | React.ReactText;
+    // public
     maskClosable?: boolean;
     style?: StyleProp<ViewStyle>;
-    children?: React.ReactElement<CloseOverlayProps> | React.ReactText;
+    contentContainerStyle?: StyleProp<ViewStyle>;
 }
 
 export class Overlay extends React.PureComponent<OverlayProps> {
@@ -33,12 +37,16 @@ export class Overlay extends React.PureComponent<OverlayProps> {
         }
     }
 
+    onStartShouldSetResponder = () => true;
+
     render() {
-        const { onTriggerHide, style, maskClosable, children, ...animatedViewProps } = this.props;
+        const { onTriggerHide, style, contentContainerStyle, maskClosable, children, ...animatedViewProps } = this.props;
         return (
             <AnimatedView {...animatedViewProps} style={styles.overlay}>
                 <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[styles.mask, style]}>
-                    <TouchableWithoutFeedback>{React.isValidElement(children) ? React.cloneElement(children, { onTriggerHide }) : children}</TouchableWithoutFeedback>
+                    <View onStartShouldSetResponder={this.onStartShouldSetResponder} style={contentContainerStyle}>
+                        {React.isValidElement(children) ? React.cloneElement(children, { onTriggerHide }) : children}
+                    </View>
                 </TouchableOpacity>
             </AnimatedView>
         );

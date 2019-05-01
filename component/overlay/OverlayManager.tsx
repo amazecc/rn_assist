@@ -3,10 +3,10 @@ import { OverlayProps, Overlay } from "./Overlay";
 import { commonStyle } from "component/common";
 import { Toast, ToastProps } from "./Toast";
 
-export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration">;
-export type ToastConfig = Pick<ToastProps, "animations" | "duration" | "containerStyle" | "delay" | "textStyle">;
+export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "contentContainerStyle">;
+export type ToastConfig = Pick<ToastProps, "animations" | "duration" | "style" | "delay" | "textStyle">;
 
-type OverlayType = "modal" | "toast";
+type OverlayType = "overlay" | "toast";
 
 interface Item {
     id: string;
@@ -15,35 +15,35 @@ interface Item {
 }
 
 interface State {
-    modals: Item[];
+    overlays: Item[];
     toasts: Item[];
 }
 
 let instance: OverlayManager | null = null;
 
 export class OverlayManager extends React.PureComponent<any, State> {
-    public static pushModal(children: React.ReactElement, props?: ModalConfig) {
+    public static pushModal(children: React.ReactElement, modalConfig?: ModalConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
         const newItem = instance.createItem(id, Overlay, {
-            ...props,
+            ...modalConfig,
             visible: true,
             maskClosable: true,
             style: commonStyle.center,
-            onHide: () => instance.destroy("modal", id),
-            onTriggerHide: () => instance.triggerHideItem("modal", id),
+            onHide: () => instance.destroy("overlay", id),
+            onTriggerHide: () => instance.triggerHideItem("overlay", id),
             children
         });
         instance.setState(prevState => ({
-            modals: [...prevState.modals, newItem]
+            overlays: [...prevState.overlays, newItem]
         }));
     }
 
-    public static pushToast(children: React.ReactElement | React.ReactText, props?: ToastConfig) {
+    public static pushToast(children: React.ReactElement | React.ReactText, toastConfig?: ToastConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
         const newItem = instance.createItem(id, Toast, {
-            ...props,
+            ...toastConfig,
             visible: true,
             maskClosable: false,
             onHide: () => instance.destroy("toast", id),
@@ -57,7 +57,7 @@ export class OverlayManager extends React.PureComponent<any, State> {
 
     public static pop() {
         const instance = OverlayManager.getInstance();
-        const lastModal = instance.state.modals[instance.state.modals.length - 1];
+        const lastModal = instance.state.overlays[instance.state.overlays.length - 1];
         if (lastModal) {
             lastModal.props.onTriggerHide();
         }
@@ -73,7 +73,7 @@ export class OverlayManager extends React.PureComponent<any, State> {
     constructor(props: any) {
         super(props);
         this.state = {
-            modals: [],
+            overlays: [],
             toasts: []
         };
     }
@@ -95,25 +95,25 @@ export class OverlayManager extends React.PureComponent<any, State> {
     }
 
     destroy(type: OverlayType, id: string) {
-        const { modals, toasts } = this.state;
-        const items = type === "toast" ? toasts : modals;
+        const { overlays, toasts } = this.state;
+        const items = type === "toast" ? toasts : overlays;
         const index = items.findIndex(_ => _.id === id);
         if (index > -1) {
             const newItems = [...items];
             newItems.splice(index, 1);
             this.setState({
                 toasts: type === "toast" ? newItems : toasts,
-                modals: type === "modal" ? newItems : modals
+                overlays: type === "overlay" ? newItems : overlays
             });
         }
     }
 
     triggerHideItem(type: OverlayType, id: string) {
-        const { modals, toasts } = this.state;
-        const items = type === "toast" ? toasts : modals;
+        const { overlays, toasts } = this.state;
+        const items = type === "toast" ? toasts : overlays;
         const newItems = items.map(_ => (_.id === id ? { ..._, props: { ..._.props, visible: false } } : _));
         this.setState({
-            modals: type === "modal" ? newItems : modals,
+            overlays: type === "overlay" ? newItems : overlays,
             toasts: type === "toast" ? newItems : toasts
         });
     }
@@ -123,11 +123,11 @@ export class OverlayManager extends React.PureComponent<any, State> {
     }
 
     render() {
-        const { modals, toasts } = this.state;
+        const { overlays, toasts } = this.state;
         const currentToast = toasts[0];
         return (
             <React.Fragment>
-                {modals.map(_ => (
+                {overlays.map(_ => (
                     <_.component key={_.id} {..._.props} />
                 ))}
                 {currentToast && <currentToast.component key={currentToast.id} {...currentToast.props} />}

@@ -4,11 +4,13 @@ import * as Animatable from "react-native-animatable";
 import { PickOptional } from "component/type";
 
 export interface AnimatedViewProps {
+    // private
     visible: boolean;
     onHide: () => void;
+    // public
     animations?: [Animatable.Animation, Animatable.Animation];
     duration?: number;
-    style?: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>; // just for Toast
 }
 
 interface State {

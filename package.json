@@ -6,7 +6,7 @@
     "start": "react-native start --reset-cache",
     "ios": "react-native run-ios --simulator \"iPhone X\"",
     "android": "react-native run-android",
-    "check": "ts-node script/check.ts"
+    "check": "node script/check.js"
   },
   "dependencies": {
     "react": "16.8.3",

@@ -1,14 +1,16 @@
 import * as React from "react";
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Overlay, OverlayProps } from "./Overlay";
-import { Omit, PickOptional } from "component/type";
+import { PickOptional } from "component/type";
 import { commonStyle } from "component/common";
 
-export interface ToastProps extends Omit<OverlayProps, "style"> {
-    delay?: number;
-    containerStyle?: StyleProp<ViewStyle>;
-    textStyle?: StyleProp<TextStyle>;
+export interface ToastProps extends OverlayProps {
+    // default
     children?: React.ReactElement | React.ReactText;
+    // public
+    delay?: number;
+    style?: StyleProp<ViewStyle>;
+    textStyle?: StyleProp<TextStyle>;
 }
 
 export class Toast extends React.PureComponent<ToastProps> {
@@ -28,9 +30,9 @@ export class Toast extends React.PureComponent<ToastProps> {
     }
 
     render() {
-        const { children, delay, containerStyle, textStyle, ...overProps } = this.props;
+        const { children, delay, style, textStyle, ...overProps } = this.props;
         return (
-            <Overlay {...overProps} style={[styles.container, containerStyle]}>
+            <Overlay {...overProps} style={[styles.container, style]}>
                 {React.isValidElement(children) ? children : <Text style={[styles.text, textStyle]}>{children}</Text>}
             </Overlay>
         );
@@ -40,10 +42,8 @@ export class Toast extends React.PureComponent<ToastProps> {
 const styles = StyleSheet.create({
     container: {
         flex: 0,
+        minHeight: 28,
         minWidth: 80,
-        maxWidth: 300,
-        paddingVertical: 6,
-        paddingHorizontal: 10,
         alignSelf: "center",
         top: "80%",
         backgroundColor: "rgba(0,0,0,0.8)",
