@@ -3,7 +3,7 @@ import { OverlayProps, Overlay } from "./Overlay";
 import { commonStyle } from "component/common";
 import { Toast, ToastProps } from "./Toast";
 
-export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle">;
+export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle" | "fadeWithMask">;
 export type ToastConfig = Pick<ToastProps, "animations" | "duration" | "style" | "delay" | "textStyle">;
 
 type OverlayType = "overlay" | "toast";
