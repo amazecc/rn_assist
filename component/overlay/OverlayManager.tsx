@@ -3,7 +3,7 @@ import { OverlayProps, Overlay } from "./Overlay";
 import { commonStyle } from "component/common";
 import { Toast, ToastProps } from "./Toast";
 
-export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "contentContainerStyle">;
+export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle">;
 export type ToastConfig = Pick<ToastProps, "animations" | "duration" | "style" | "delay" | "textStyle">;
 
 type OverlayType = "overlay" | "toast";
@@ -29,7 +29,7 @@ export class OverlayManager extends React.PureComponent<any, State> {
             ...modalConfig,
             visible: true,
             maskClosable: true,
-            style: commonStyle.center,
+            style: (modalConfig && modalConfig.style) || commonStyle.center,
             onHide: () => instance.destroy("overlay", id),
             onTriggerHide: () => instance.triggerHideItem("overlay", id),
             children
