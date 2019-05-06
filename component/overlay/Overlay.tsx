@@ -49,13 +49,13 @@ export class Overlay extends React.PureComponent<OverlayProps> {
         );
         return (
             <React.Fragment>
-                <AnimatedView {...animatedViewProps} style={styles.overlay}>
-                    <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[styles.mask, style, StyleSheet.absoluteFill]}>
+                <AnimatedView {...animatedViewProps} style={StyleSheet.absoluteFillObject}>
+                    <TouchableOpacity activeOpacity={1} onPress={maskClosable ? onTriggerHide : undefined} style={[styles.mask, style]}>
                         {fadeWithMask && content}
                     </TouchableOpacity>
                 </AnimatedView>
                 {!fadeWithMask && (
-                    <View pointerEvents="box-none" style={[style, StyleSheet.absoluteFill]}>
+                    <View pointerEvents="box-none" style={[StyleSheet.absoluteFill, style]}>
                         {content}
                     </View>
                 )}
@@ -65,11 +65,8 @@ export class Overlay extends React.PureComponent<OverlayProps> {
 }
 
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        ...StyleSheet.absoluteFillObject
-    },
     mask: {
+        flex: 1,
         backgroundColor: "#00000080"
     }
 });
