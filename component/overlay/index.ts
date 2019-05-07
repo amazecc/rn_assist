@@ -1,1 +1,1 @@
-export { OverlayManager, ModalConfig, ToastConfig } from "./OverlayManager";
+export { OverlayManager, OverlayConfig, ToastConfig } from "./OverlayManager";

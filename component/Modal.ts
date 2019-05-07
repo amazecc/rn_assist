@@ -1,9 +1,9 @@
 import * as React from "react";
-import { OverlayManager, ModalConfig } from "./overlay/OverlayManager";
+import { OverlayManager, OverlayConfig as ModalConfig } from "./overlay/OverlayManager";
 
 export const Modal = {
     push(children: React.ReactElement, props?: ModalConfig) {
-        return OverlayManager.pushModal(children, props);
+        return OverlayManager.pushOverlay(children, props);
     },
     pop() {
         OverlayManager.pop();

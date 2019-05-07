@@ -3,7 +3,7 @@ import { OverlayProps, Overlay } from "./Overlay";
 import { commonStyle } from "component/common";
 import { Toast, ToastProps } from "./Toast";
 
-export type ModalConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle" | "fadeWithMask">;
+export type OverlayConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle" | "fadeWithMask">;
 export type ToastConfig = Pick<ToastProps, "animations" | "duration" | "style" | "delay" | "textStyle">;
 
 type OverlayType = "overlay" | "toast";
@@ -11,7 +11,7 @@ type OverlayType = "overlay" | "toast";
 interface Item {
     id: string;
     props: OverlayProps;
-    component: React.ComponentType<any>; // Modal
+    component: React.ComponentType<any>;
 }
 
 interface State {
@@ -22,14 +22,14 @@ interface State {
 let instance: OverlayManager | null = null;
 
 export class OverlayManager extends React.PureComponent<any, State> {
-    public static pushModal(children: React.ReactElement, modalConfig?: ModalConfig) {
+    public static pushOverlay(children: React.ReactElement, overlayConfig?: OverlayConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
         const newItem = instance.createItem(id, Overlay, {
-            ...modalConfig,
+            ...overlayConfig,
             visible: true,
             maskClosable: true,
-            style: (modalConfig && modalConfig.style) || commonStyle.center,
+            style: (overlayConfig && overlayConfig.style) || commonStyle.center,
             onHide: () => instance.destroy("overlay", id),
             onTriggerHide: () => instance.triggerHideItem("overlay", id),
             children
@@ -57,9 +57,9 @@ export class OverlayManager extends React.PureComponent<any, State> {
 
     public static pop() {
         const instance = OverlayManager.getInstance();
-        const lastModal = instance.state.overlays[instance.state.overlays.length - 1];
-        if (lastModal) {
-            lastModal.props.onTriggerHide();
+        const lastOverlay = instance.state.overlays[instance.state.overlays.length - 1];
+        if (lastOverlay) {
+            lastOverlay.props.onTriggerHide();
         }
     }
 
