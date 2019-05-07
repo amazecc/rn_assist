@@ -41,11 +41,12 @@ export class Toast extends React.PureComponent<ToastProps> {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 0,
+        flex: undefined,
+        position: "absolute",
         minHeight: 28,
         minWidth: 80,
         alignSelf: "center",
-        top: "80%",
+        bottom: "20%",
         backgroundColor: "rgba(0,0,0,0.8)",
         justifyContent: "center",
         alignItems: "center",
