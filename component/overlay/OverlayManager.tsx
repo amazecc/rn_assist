@@ -25,18 +25,21 @@ export class OverlayManager extends React.PureComponent<any, State> {
     public static pushOverlay(children: React.ReactElement, overlayConfig?: OverlayConfig) {
         const instance = OverlayManager.getInstance();
         const id = instance.createID();
+        const destroy = () => instance.triggerHideItem("overlay", id);
         const newItem = instance.createItem(id, Overlay, {
             ...overlayConfig,
             visible: true,
             maskClosable: true,
             style: (overlayConfig && overlayConfig.style) || commonStyle.center,
             onHide: () => instance.destroy("overlay", id),
-            onTriggerHide: () => instance.triggerHideItem("overlay", id),
+            onTriggerHide: destroy,
             children
         });
         instance.setState(prevState => ({
             overlays: [...prevState.overlays, newItem]
         }));
+
+        return { destroy };
     }
 
     public static pushToast(children: React.ReactElement | React.ReactText, toastConfig?: ToastConfig) {

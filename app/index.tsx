@@ -25,7 +25,11 @@ export default class App extends React.Component<any, State> {
 
     removeOverlay = () => this.setState({ showOverlay: null });
 
-    showModal = () => Modal.push(<ModalTest />, { contentContainerStyle: { padding: 20, backgroundColor: "red" }, fadeWithMask: false });
+    showModal = () => {
+        const { destroy } = Modal.push(<ModalTest />, { contentContainerStyle: { padding: 20, backgroundColor: "red" }, fadeWithMask: false });
+
+        setTimeout(destroy, 2000);
+    };
 
     count = 0;
     showToastText = () => {
