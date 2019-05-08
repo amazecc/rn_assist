@@ -23,7 +23,7 @@ export default class App extends React.Component<any, State> {
 
     showToastText = () => toast("text");
 
-    showToastElement = () =>
+    showToastElement = () => {
         toast(
             <View style={{ width: 200, height: 100, justifyContent: "center", alignItems: "center" }}>
                 <Text style={{ color: color.white, fontSize: 24 }}>react element</Text>
@@ -35,6 +35,7 @@ export default class App extends React.Component<any, State> {
                 animations: ["bounceIn", "swing"]
             }
         );
+    };
 
     render() {
         return (
@@ -55,6 +56,10 @@ export default class App extends React.Component<any, State> {
                             onPress={() => toast("渐变")}
                             style={{ backgroundColor: color.blue, height: 40, width: 100, justifyContent: "center", alignItems: "center" }}
                         />
+                        <Space />
+                        <Touchable style={{ height: 40, width: 100, borderWidth: 1, borderColor: color.blue }} />
+                        <Space />
+                        <Touchable style={{ height: 40, width: 100, borderWidth: 1, borderColor: color.blue, borderRadius: 30, backgroundColor: color.white }} />
                     </Box>
                 </ScrollView>
                 <OverlayManager />

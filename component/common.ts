@@ -15,8 +15,3 @@ export const commonStyle = StyleSheet.create({
         }
     })
 });
-
-/**
- * Hit-slop definition
- */
-export const globalHitSlop = { right: 8, top: 8, left: 8, bottom: 8 };

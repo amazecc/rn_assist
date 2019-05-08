@@ -1,21 +1,16 @@
 import { PickOptional } from "./type";
-import { globalHitSlop } from "./common";
+import { commonStyle } from "./common";
 import * as React from "react";
-import { GestureResponderEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle, TouchableOpacityProps } from "react-native";
 import LinearGradient, { LinearGradientProps } from "react-native-linear-gradient";
 
-interface Props extends Partial<LinearGradientProps> {
-    onPress?: (event: GestureResponderEvent) => void;
-    disabled?: boolean;
-    activeOpacity?: number;
-    enableHitSlop?: boolean;
-}
+type LinearGradientPropsNeeds = Pick<LinearGradientProps, "colors" | "start" | "end" | "locations" | "useAngle" | "angleCenter" | "angle">;
+
+interface Props extends Partial<LinearGradientPropsNeeds>, TouchableOpacityProps {}
 
 export class Touchable extends React.PureComponent<Props> {
     public static defaultProps: PickOptional<Props> = {
-        disabled: false,
-        activeOpacity: 0.75,
-        enableHitSlop: true
+        activeOpacity: 0.75
     };
 
     splitStyle = () => {
@@ -39,41 +34,38 @@ export class Touchable extends React.PureComponent<Props> {
     };
 
     renderTouchableOpacity = (children: React.ReactNode, containerStyle: StyleProp<ViewStyle>) => {
-        const { enableHitSlop, disabled, onPress, onLayout, activeOpacity } = this.props;
+        // LinearGradientProps: colors, start, end, locations, useAngle, angleCenter, angle
+        // TouchableOpacityProps: style, children, ...resetViewProps
+        const { colors, start, end, locations, useAngle, angleCenter, angle, style, children: c, ...resetTouchableOpacityProps } = this.props;
         return (
-            <TouchableOpacity
-                hitSlop={enableHitSlop ? globalHitSlop : undefined}
-                onPress={disabled ? undefined : onPress}
-                activeOpacity={disabled ? 1 : activeOpacity}
-                onLayout={onLayout}
-                style={containerStyle}
-            >
+            <TouchableOpacity {...resetTouchableOpacityProps} style={containerStyle}>
                 {children}
             </TouchableOpacity>
         );
     };
 
     render() {
-        const { children, style, colors, ...restLinearGradientProps } = this.props;
+        const { colors, start, end, locations, useAngle, angleCenter, angle, children, style } = this.props;
         if (colors) {
             const { outerStyle, gradientStyle, borderRadiusStyle } = this.splitStyle();
             const gradientComponent = (
-                <LinearGradient colors={colors} {...restLinearGradientProps} style={[styles.linearGradient, borderRadiusStyle, gradientStyle]}>
+                <LinearGradient
+                    pointerEvents="box-none"
+                    colors={colors}
+                    start={start}
+                    end={end}
+                    locations={locations}
+                    useAngle={useAngle}
+                    angleCenter={angleCenter}
+                    angle={angle}
+                    style={[commonStyle.flex1, borderRadiusStyle, gradientStyle]}
+                >
                     {children}
                 </LinearGradient>
             );
-            return this.renderTouchableOpacity(gradientComponent, [styles.outerContainerForGradient, borderRadiusStyle, outerStyle]);
+            return this.renderTouchableOpacity(gradientComponent, [borderRadiusStyle, outerStyle]);
         } else {
             return this.renderTouchableOpacity(children, style);
         }
     }
 }
-
-const styles = StyleSheet.create({
-    linearGradient: {
-        flex: 1
-    },
-    outerContainerForGradient: {
-        overflow: "hidden"
-    }
-});
