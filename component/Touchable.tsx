@@ -6,10 +6,10 @@ import LinearGradient, { LinearGradientProps } from "react-native-linear-gradien
 
 type LinearGradientPropsNeeds = Pick<LinearGradientProps, "colors" | "start" | "end" | "locations" | "useAngle" | "angleCenter" | "angle">;
 
-interface Props extends Partial<LinearGradientPropsNeeds>, TouchableOpacityProps {}
+export interface TouchableProps extends Partial<LinearGradientPropsNeeds>, TouchableOpacityProps {}
 
-export class Touchable extends React.PureComponent<Props> {
-    public static defaultProps: PickOptional<Props> = {
+export class Touchable extends React.PureComponent<TouchableProps> {
+    public static defaultProps: PickOptional<TouchableProps> = {
         activeOpacity: 0.75
     };
 

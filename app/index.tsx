@@ -1,7 +1,7 @@
 import * as React from "react";
-import { StyleSheet, View, Button, Text, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { Box, Space } from "./Box";
-import { Modal, OverlayManager, toast, Touchable } from "component";
+import { Modal, OverlayManager, toast, Touchable, Button } from "component";
 
 interface State {}
 
@@ -14,7 +14,7 @@ export default class App extends React.Component<any, State> {
     showModal = () => {
         const ModalTest = () => (
             <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: color.white }}>
-                <Button title={`close Modal`} onPress={Modal.pop} />
+                <Button text={`close Modal`} onPress={Modal.pop} />
             </View>
         );
         const { destroy } = Modal.push(<ModalTest />);
@@ -42,11 +42,12 @@ export default class App extends React.Component<any, State> {
             <SafeAreaView style={styles.container}>
                 <ScrollView contentContainerStyle={styles.scrollView}>
                     <Box title="Modal">
-                        <Button title="show Modal" onPress={this.showModal} />
+                        <Button text="show Modal" onPress={this.showModal} />
                     </Box>
                     <Box title="Toast">
-                        <Button title="show toast text" onPress={this.showToastText} />
-                        <Button title="show toast element" onPress={this.showToastElement} />
+                        <Button text="show toast text" onPress={this.showToastText} />
+                        <Space />
+                        <Button text="show toast element" onPress={this.showToastElement} />
                     </Box>
                     <Box title="Touchable">
                         <Touchable onPress={() => toast("纯色")} style={{ backgroundColor: color.blue, height: 40, width: 100, justifyContent: "center", alignItems: "center" }} />
@@ -60,6 +61,11 @@ export default class App extends React.Component<any, State> {
                         <Touchable style={{ height: 40, width: 100, borderWidth: 1, borderColor: color.blue }} />
                         <Space />
                         <Touchable style={{ height: 40, width: 100, borderWidth: 1, borderColor: color.blue, borderRadius: 30, backgroundColor: color.white }} />
+                    </Box>
+                    <Box title="Button">
+                        <Button {...gradient.yellowProps} text="按钮1" />
+                        <Space />
+                        <Button {...gradient.purpleProps} text="按钮2" />
                     </Box>
                 </ScrollView>
                 <OverlayManager />

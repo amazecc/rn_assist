@@ -15,3 +15,12 @@ export const commonStyle = StyleSheet.create({
         }
     })
 });
+
+export const colors = {
+    blue: "#007aff",
+    white: "#ffffff"
+};
+
+export const radius = {
+    main: 4
+};
