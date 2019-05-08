@@ -8,6 +8,8 @@ export const Box: React.FunctionComponent<{ title: string }> = props => (
     </View>
 );
 
+export const Space: React.FunctionComponent = () => <View style={styles.space} />;
+
 const styles = StyleSheet.create({
     boxContainer: {
         padding: 20,
@@ -34,7 +36,10 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderColor: "#ccc",
         marginTop: 10,
-        paddingVertical: 10,
+        paddingTop: 10,
         alignItems: "flex-start"
+    },
+    space: {
+        height: 10
     }
 });

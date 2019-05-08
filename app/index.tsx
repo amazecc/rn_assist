@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, Button, Text, SafeAreaView, ScrollView } from "react-native";
-import { Box } from "./Box";
-import { Modal, OverlayManager, toast } from "component";
+import { Box, Space } from "./Box";
+import { Modal, OverlayManager, toast, Touchable } from "component";
 
 interface State {}
 
@@ -13,7 +13,7 @@ export default class App extends React.Component<any, State> {
 
     showModal = () => {
         const ModalTest = () => (
-            <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+            <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: color.white }}>
                 <Button title={`close Modal`} onPress={Modal.pop} />
             </View>
         );
@@ -26,11 +26,11 @@ export default class App extends React.Component<any, State> {
     showToastElement = () =>
         toast(
             <View style={{ width: 200, height: 100, justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ color: "#fff", fontSize: 24 }}>react element</Text>
+                <Text style={{ color: color.white, fontSize: 24 }}>react element</Text>
             </View>,
             {
                 style: {
-                    backgroundColor: "#007aff"
+                    backgroundColor: color.blue
                 },
                 animations: ["bounceIn", "swing"]
             }
@@ -46,6 +46,15 @@ export default class App extends React.Component<any, State> {
                     <Box title="Toast">
                         <Button title="show toast text" onPress={this.showToastText} />
                         <Button title="show toast element" onPress={this.showToastElement} />
+                    </Box>
+                    <Box title="Touchable">
+                        <Touchable onPress={() => toast("纯色")} style={{ backgroundColor: color.blue, height: 40, width: 100, justifyContent: "center", alignItems: "center" }} />
+                        <Space />
+                        <Touchable
+                            {...gradient.blueProps}
+                            onPress={() => toast("渐变")}
+                            style={{ backgroundColor: color.blue, height: 40, width: 100, justifyContent: "center", alignItems: "center" }}
+                        />
                     </Box>
                 </ScrollView>
                 <OverlayManager />
@@ -63,3 +72,18 @@ const styles = StyleSheet.create({
         padding: 20
     }
 });
+
+const color = {
+    blue: "#007aff",
+    white: "#ffffff",
+    black: "#000000"
+};
+
+const gradient = {
+    blueProps: { colors: ["#137efa", "#3ebbfb"], start: { x: 0, y: 1 }, end: { x: 1, y: 1 }, locations: [0, 1] },
+    whiteProps: { colors: ["#ffffff", "#ffffff"], locations: [0, 1] },
+    lightGrayPureProps: { colors: ["#f1f5fd", "#f1f5fd"], locations: [0, 1] },
+    purpleProps: { colors: ["#773efc", "#b459f8"], start: { x: 0, y: 0 }, end: { x: 1, y: 1 }, locations: [0, 1] },
+    yellowProps: { colors: ["#ffb75d", "#fba622"], start: { x: 0, y: 1 }, end: { x: 1, y: 0 }, locations: [0, 1] },
+    redProps: { colors: ["#f99f63", "#ff6753"], start: { x: 0, y: 1 }, end: { x: 1, y: 0 }, locations: [0, 1] }
+};
