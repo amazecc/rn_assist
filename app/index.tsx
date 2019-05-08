@@ -1,63 +1,55 @@
 import * as React from "react";
-import { StyleSheet, View, Button, Text } from "react-native";
-
+import { StyleSheet, View, Button, Text, SafeAreaView, ScrollView } from "react-native";
+import { Box } from "./Box";
 import { Modal, OverlayManager, toast } from "component";
 
 interface State {}
 
-const ModalTest = () => (
-    <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
-        <Button title={`close Modal`} onPress={Modal.pop} />
-    </View>
-);
-
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            showOverlay: true
-        };
+        this.state = {};
     }
 
-    showOverlay = () => this.setState({ showOverlay: true });
-
-    hideOverlay = () => this.setState({ showOverlay: false });
-
-    removeOverlay = () => this.setState({ showOverlay: null });
-
     showModal = () => {
-        const { destroy } = Modal.push(<ModalTest />, { contentContainerStyle: { padding: 20, backgroundColor: "red" }, fadeWithMask: false });
-
-        setTimeout(destroy, 2000);
+        const ModalTest = () => (
+            <View style={{ height: 100, width: 200, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
+                <Button title={`close Modal`} onPress={Modal.pop} />
+            </View>
+        );
+        const { destroy } = Modal.push(<ModalTest />);
+        setTimeout(destroy, 3000);
     };
 
-    count = 0;
-    showToastText = () => {
-        toast(this.count++);
-    };
+    showToastText = () => toast("text");
 
-    showToastElement = () => {
+    showToastElement = () =>
         toast(
-            <View style={{ width: 100, height: 100, justifyContent: "center", alignItems: "center" }}>
-                <Text style={{ color: "#fff", fontSize: 24 }}>toast</Text>
+            <View style={{ width: 200, height: 100, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: "#fff", fontSize: 24 }}>react element</Text>
             </View>,
             {
                 style: {
-                    backgroundColor: "red"
+                    backgroundColor: "#007aff"
                 },
                 animations: ["bounceIn", "swing"]
             }
         );
-    };
 
     render() {
         return (
-            <View style={styles.container}>
-                <Button title="show Modal" onPress={this.showModal} />
-                <Button title="show toast text" onPress={this.showToastText} />
-                <Button title="show toast element" onPress={this.showToastElement} />
+            <SafeAreaView style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    <Box title="Modal">
+                        <Button title="show Modal" onPress={this.showModal} />
+                    </Box>
+                    <Box title="Toast">
+                        <Button title="show toast text" onPress={this.showToastText} />
+                        <Button title="show toast element" onPress={this.showToastElement} />
+                    </Box>
+                </ScrollView>
                 <OverlayManager />
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -65,8 +57,9 @@ export default class App extends React.Component<any, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
         backgroundColor: "#F5FCFF"
+    },
+    scrollView: {
+        padding: 20
     }
 });
