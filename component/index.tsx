@@ -4,3 +4,4 @@ export { Modal } from "./Modal";
 export { toast } from "./Toast";
 export { Touchable, TouchableProps } from "./Touchable";
 export { Button, ButtonProps } from "./Button";
+export { Switch, SwitchProps } from "./Switch";

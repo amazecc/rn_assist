@@ -1,14 +1,18 @@
 import * as React from "react";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { Box, Space } from "./Box";
-import { Modal, OverlayManager, toast, Touchable, Button } from "component";
+import { Modal, OverlayManager, toast, Touchable, Button, Switch } from "component";
 
-interface State {}
+interface State {
+    switchValue: boolean;
+}
 
 export default class App extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.state = {};
+        this.state = {
+            switchValue: false
+        };
     }
 
     showModal = () => {
@@ -66,6 +70,11 @@ export default class App extends React.Component<any, State> {
                         <Button {...gradient.yellowProps} text="按钮1" />
                         <Space />
                         <Button {...gradient.purpleProps} text="按钮2" />
+                    </Box>
+                    <Box title="Switch">
+                        <Switch checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
+                        <Space />
+                        <Switch disabled checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
                     </Box>
                 </ScrollView>
                 <OverlayManager />
