@@ -72,7 +72,7 @@ export default class App extends React.Component<any, State> {
                         <Button {...gradient.purpleProps} text="按钮2" />
                     </Box>
                     <Box title="Switch">
-                        <Switch height={18} margin={{marginVertical: 3}} checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
+                        <Switch height={18} margin={{ marginVertical: 3 }} checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
                         <Space />
                         <Switch checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
                         <Space />
