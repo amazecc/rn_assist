@@ -1,9 +1,8 @@
 import * as React from "react";
-import { Animated, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 import { Touchable } from "./Touchable";
 import { PickOptional } from "./type";
-
-// TODO: 添加记忆函数优化样式
+import { commonStyle } from "./common";
 
 interface ColorsMap {
     uncheckedDisabled?: string;
@@ -12,10 +11,21 @@ interface ColorsMap {
     checked?: string;
 }
 
+interface Margin {
+    marginTop?: number;
+    marginBottom?: number;
+    marginLeft?: number;
+    marginRight?: number;
+    marginVertical?: number;
+    marginHorizontal?: number;
+}
+
 export interface SwitchProps {
     checked?: boolean;
     onChange?: (isChecked: boolean) => void;
-    containerStyle?: StyleProp<ViewStyle>; // TODO
+    height?: number;
+    width?: number;
+    margin?: Margin;
     circleSize?: number;
     circleColors?: ColorsMap;
     backgroundColors?: ColorsMap;
@@ -23,62 +33,66 @@ export interface SwitchProps {
 }
 
 interface State {
-    left: Animated.Value;
+    innerWidth: Animated.Value;
     mapValue: Animated.Value;
 }
 
 export class Switch extends React.PureComponent<SwitchProps, State> {
-    public static defaultProps: PickOptional<SwitchProps> = {
+    public static readonly defaultProps: PickOptional<SwitchProps> = {
         disabled: false,
         circleSize: 26,
-        containerStyle: {},
+        width: 50,
+        height: 30,
         circleColors: {},
         backgroundColors: {}
     };
 
-    private static config = {
-        // background color
-        uncheckedDisabled: 0,
-        unchecked: 20,
-        checkedDisabled: 40,
-        checked: 60,
-        // animation duration
+    private static readonly config = {
+        range: [0, 10],
+        defaultSize: {
+            height: 30,
+            width: 50
+        },
         animationDuration: 200
     };
 
-    private backgroundColor: Array<{ status: keyof ColorsMap; color: string }> = [
+    private readonly backgroundColors: Array<{ status: keyof ColorsMap; color: string }> = [
         { status: "uncheckedDisabled", color: "#ecedf380" },
         { status: "unchecked", color: "#ecedf3" },
         { status: "checkedDisabled", color: "rgba(76, 217, 100, 0.5)" },
         { status: "checked", color: "rgb(76, 217, 100)" }
     ];
 
-    private circleBackgroundColor: Array<{ status: keyof ColorsMap; color: string }> = [
+    private readonly circleColors: Array<{ status: keyof ColorsMap; color: string }> = [
         { status: "uncheckedDisabled", color: "#ffffff" },
         { status: "unchecked", color: "#ffffff" },
         { status: "checkedDisabled", color: "#ffffff" },
         { status: "checked", color: "#ffffff" }
     ];
 
+    private movingViewWidth: { unchecked: number; checked: number } | undefined;
+
+    private space: number | undefined;
+
     constructor(props: SwitchProps) {
         super(props);
+        this.initialColors();
+        this.setSpace();
+        this.setMovingViewWidth();
         this.state = this.initialState(props);
-        this.initialColors(props);
     }
 
     componentDidUpdate(prevProps: SwitchProps) {
         const { checked, disabled } = this.props;
         if (prevProps.checked !== checked || prevProps.disabled !== disabled) {
-            const leftDistance = this.getMoveDistance();
             Animated.parallel([
-                Animated.timing(this.state.left, {
+                Animated.timing(this.state.innerWidth, {
                     duration: Switch.config.animationDuration,
-                    // 22 => styles.container.width - container.circle.width - circle-margin-left
-                    toValue: checked ? leftDistance.after : leftDistance.before
+                    toValue: checked ? this.movingViewWidth!.checked : this.movingViewWidth!.unchecked
                 }),
                 Animated.timing(this.state.mapValue, {
                     duration: Switch.config.animationDuration,
-                    toValue: checked ? (disabled ? Switch.config.checkedDisabled : Switch.config.checked) : disabled ? Switch.config.uncheckedDisabled : Switch.config.unchecked
+                    toValue: checked ? Switch.config.range[1] : Switch.config.range[0]
                 })
             ]).start();
         }
@@ -92,24 +106,20 @@ export class Switch extends React.PureComponent<SwitchProps, State> {
     };
 
     initialState(props: SwitchProps): State {
-        // 22 => styles.container.width - container.circle.width - circle-margin-left
-        const leftDistance = this.getMoveDistance();
-        const left = new Animated.Value(props.checked ? leftDistance.after : leftDistance.before);
-        const mapValue = props.checked
-            ? new Animated.Value(!props.disabled ? Switch.config.checked : Switch.config.checkedDisabled)
-            : new Animated.Value(!props.disabled ? Switch.config.unchecked : Switch.config.uncheckedDisabled);
-        return { left, mapValue };
+        const innerWidth = new Animated.Value(props.checked ? this.movingViewWidth!.checked : this.movingViewWidth!.unchecked);
+        const mapValue = new Animated.Value(props.checked ? Switch.config.range[1] : Switch.config.range[0]);
+        return { innerWidth, mapValue };
     }
 
-    initialColors(props: SwitchProps) {
-        const { backgroundColors, circleColors } = props;
-        this.backgroundColor.forEach(_ => {
+    initialColors() {
+        const { backgroundColors, circleColors } = this.props;
+        this.backgroundColors.forEach(_ => {
             const colorFromProps = backgroundColors![_.status];
             if (colorFromProps) {
                 _.color = colorFromProps;
             }
         });
-        this.circleBackgroundColor.forEach(_ => {
+        this.circleColors.forEach(_ => {
             const colorFromProps = circleColors![_.status];
             if (colorFromProps) {
                 _.color = colorFromProps;
@@ -117,67 +127,61 @@ export class Switch extends React.PureComponent<SwitchProps, State> {
         });
     }
 
-    getMoveDistance() {
-        // TODO: REFACTOR (22, 2)
-        const { containerStyle, circleSize } = this.props;
-        const containerStyleObj = StyleSheet.flatten(containerStyle!);
-        if (typeof containerStyleObj.height !== "string" && typeof containerStyleObj.width !== "string") {
-            const before = (containerStyleObj.height || containerHeight - circleSize!) / 2;
-            const after = (containerStyleObj.width || containerWidth) - circleSize! - before;
-            return { before, after };
-        } else {
-            throw new Error("Switch: containerStyle.height or containerStyle.width just support number type");
-        }
+    setMovingViewWidth() {
+        const { circleSize, width } = this.props;
+        this.movingViewWidth = { unchecked: circleSize! + this.space! * 2, checked: width! };
+    }
+
+    setSpace() {
+        const { circleSize, height } = this.props;
+        const space = (height! - circleSize!) / 2;
+        this.space = circleSize! > height! ? 0 : space!;
     }
 
     render() {
-        const { disabled, containerStyle, circleSize } = this.props;
-        const range = [Switch.config.uncheckedDisabled, Switch.config.unchecked, Switch.config.checkedDisabled, Switch.config.checked];
+        const { disabled, circleSize, height, width, margin } = this.props;
+        const backgroundColors = disabled ? [this.backgroundColors[0].color, this.backgroundColors[1].color] : [this.backgroundColors[1].color, this.backgroundColors[3].color];
+        const circleColors = disabled ? [this.circleColors[0].color, this.circleColors[1].color] : [this.circleColors[1].color, this.circleColors[3].color];
         return (
-            <Touchable disabled={disabled} activeOpacity={1} onPress={this.onChange} style={[styles.container, containerStyle]}>
-                <Animated.View
-                    style={[
-                        styles.background,
-                        {
-                            backgroundColor: this.state.mapValue.interpolate({
-                                inputRange: range,
-                                outputRange: this.backgroundColor.map(_ => _.color)
-                            })
-                        }
-                    ]}
-                />
-                <Animated.View
-                    style={[
-                        styles.circle,
-                        { width: circleSize, height: circleSize, borderRadius: circleSize! / 2 },
-                        {
-                            left: this.state.left,
-                            backgroundColor: this.state.mapValue.interpolate({
-                                inputRange: range,
-                                outputRange: this.circleBackgroundColor.map(_ => _.color)
-                            })
-                        }
-                    ]}
-                />
+            <Touchable disabled={disabled} activeOpacity={1} onPress={this.onChange} style={[Switch.config.defaultSize, { height, width, borderRadius: height! / 2, ...margin }]}>
+                <View style={[styles.background, { backgroundColor: disabled ? this.backgroundColors[0].color : this.backgroundColors[1].color }]}>
+                    <Animated.View
+                        style={[
+                            styles.background,
+                            {
+                                backgroundColor: this.state.mapValue.interpolate({
+                                    inputRange: Switch.config.range,
+                                    outputRange: backgroundColors
+                                }),
+                                width: this.state.innerWidth,
+                                alignItems: "flex-end"
+                            }
+                        ]}
+                    >
+                        <Animated.View
+                            style={[
+                                commonStyle.shadow,
+                                { width: circleSize, height: circleSize, borderRadius: circleSize! / 2 },
+                                {
+                                    backgroundColor: this.state.mapValue.interpolate({
+                                        inputRange: Switch.config.range,
+                                        outputRange: circleColors
+                                    }),
+                                    marginHorizontal: this.space
+                                }
+                            ]}
+                        />
+                    </Animated.View>
+                </View>
             </Touchable>
         );
     }
 }
 
-const containerHeight = 30;
-const containerWidth = 50;
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: "center",
-        height: containerHeight,
-        width: containerWidth,
-        overflow: "visible"
-    },
     background: {
         flex: 1,
-        borderRadius: containerHeight / 2
-    },
-    circle: {
-        position: "absolute"
+        justifyContent: "center",
+        borderRadius: 99
     }
 });
