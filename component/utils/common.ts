@@ -18,9 +18,12 @@ export const commonStyle = StyleSheet.create({
 
 export const colors = {
     blue: "#007aff",
-    white: "#ffffff"
+    white: "#ffffff",
+    gray: "#f1f5fd",
+    grayDisabled: "#dddddd"
 };
 
 export const radius = {
-    main: 4
+    main: 4,
+    input: 4
 };

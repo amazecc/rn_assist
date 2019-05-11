@@ -6,3 +6,5 @@ export { Touchable, TouchableProps } from "./Touchable";
 export { Button, ButtonProps } from "./Button";
 export { Switch, SwitchProps } from "./Switch";
 export { Spin, SpinProps } from "./Spin";
+export { Input, InputProps } from "./Input";
+export { Textarea, TextareaProps } from "./Textarea";

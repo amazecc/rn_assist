@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { Box, Space } from "./Box";
-import { Modal, OverlayManager, toast, Touchable, Button, Switch, Spin } from "component";
+import { Modal, OverlayManager, toast, Touchable, Button, Switch, Spin, Input, Textarea } from "component";
 import { colors } from "component/utils/common";
 
 interface State {
@@ -86,6 +86,20 @@ export default class App extends React.Component<any, State> {
                         <Space />
                         <Spin size="large" visible={false} />
                         <Spin visible={true} color={colors.blue} />
+                    </Box>
+                    <Box title="Input">
+                        <Input placeholder="请输入名称" style={{ width: "100%" }} />
+                        <Space />
+                        <Input disabled value="disabled" style={{ width: "100%" }} />
+                        <Space />
+                        <Input value="中国" style={{ width: "100%" }} />
+                    </Box>
+                    <Box title="Textarea">
+                        <Textarea placeholder="请输入名称" style={{ width: "100%" }} />
+                        <Space />
+                        <Textarea disabled value="disabled" style={{ width: "100%" }} />
+                        <Space />
+                        <Textarea value="中国" style={{ width: "100%" }} />
                     </Box>
                 </ScrollView>
                 <OverlayManager />
