@@ -1,7 +1,8 @@
 import * as React from "react";
 import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
 import { Box, Space } from "./Box";
-import { Modal, OverlayManager, toast, Touchable, Button, Switch } from "component";
+import { Modal, OverlayManager, toast, Touchable, Button, Switch, Spin } from "component";
+import { colors } from "component/utils/common";
 
 interface State {
     switchValue: boolean;
@@ -77,6 +78,14 @@ export default class App extends React.Component<any, State> {
                         <Switch checked={this.state.switchValue} onChange={switchValue => this.setState({ switchValue })} />
                         <Space />
                         <Switch disabled checked={this.state.switchValue} />
+                    </Box>
+                    <Box title="Spin">
+                        <Spin visible={true} />
+                        <Space />
+                        <Spin visible={true} size="large" />
+                        <Space />
+                        <Spin size="large" visible={false} />
+                        <Spin visible={true} color={colors.blue} />
                     </Box>
                 </ScrollView>
                 <OverlayManager />
