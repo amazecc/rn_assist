@@ -1,6 +1,6 @@
 import * as React from "react";
 import { OverlayProps, Overlay } from "./Overlay";
-import { commonStyle } from "component/common";
+import { commonStyle } from "component/utils/common";
 import { Toast, ToastProps } from "./Toast";
 
 export type OverlayConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle" | "fadeWithMask">;

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Animated, StyleSheet } from "react-native";
 import { Touchable } from "./Touchable";
-import { PickOptional } from "./type";
-import { commonStyle } from "./common";
+import { PickOptional } from "./utils/type";
+import { commonStyle } from "./utils/common";
 
 interface ColorsMap {
     uncheckedDisabled?: string;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { PickOptional } from "component/type";
+import { PickOptional } from "component/utils/type";
 
 export interface AnimatedViewProps {
     // private

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleProp, StyleSheet, TextStyle, Text } from "react-native";
 import { Touchable, TouchableProps } from "./Touchable";
-import { colors, radius } from "./common";
+import { colors, radius } from "./utils/common";
 
 export interface ButtonProps extends TouchableProps {
     text?: string | React.ReactElement;

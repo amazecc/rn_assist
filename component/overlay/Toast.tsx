@@ -1,8 +1,8 @@
 import * as React from "react";
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Overlay, OverlayProps } from "./Overlay";
-import { PickOptional } from "component/type";
-import { commonStyle, radius } from "component/common";
+import { PickOptional } from "component/utils/type";
+import { commonStyle, radius } from "component/utils/common";
 
 export interface ToastProps extends OverlayProps {
     // default
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.8)",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 4,
+        borderRadius: 4
     },
     text: {
         textAlign: "center",

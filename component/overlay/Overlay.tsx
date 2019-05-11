@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler } from "react-native";
 import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
-import { PickOptional } from "component/type";
+import { PickOptional } from "component/utils/type";
 
 export interface OverlayProps extends AnimatedViewProps {
     // private

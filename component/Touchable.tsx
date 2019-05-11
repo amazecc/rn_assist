@@ -1,5 +1,5 @@
-import { PickOptional } from "./type";
-import { commonStyle } from "./common";
+import { PickOptional } from "./utils/type";
+import { commonStyle } from "./utils/common";
 import * as React from "react";
 import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle, TouchableOpacityProps } from "react-native";
 import LinearGradient, { LinearGradientProps } from "react-native-linear-gradient";
