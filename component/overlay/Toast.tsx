@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 4,
-        ...commonStyle.shadow
     },
     text: {
         textAlign: "center",

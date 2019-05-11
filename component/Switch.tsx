@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet } from "react-native";
 import { Touchable } from "./Touchable";
 import { PickOptional } from "./type";
 import { commonStyle } from "./common";
@@ -140,48 +140,55 @@ export class Switch extends React.PureComponent<SwitchProps, State> {
 
     render() {
         const { disabled, circleSize, height, width, margin } = this.props;
-        const backgroundColors = disabled ? [this.backgroundColors[0].color, this.backgroundColors[1].color] : [this.backgroundColors[1].color, this.backgroundColors[3].color];
-        const circleColors = disabled ? [this.circleColors[0].color, this.circleColors[1].color] : [this.circleColors[1].color, this.circleColors[3].color];
+        const backgroundColors = disabled ? [this.backgroundColors[0].color, this.backgroundColors[2].color] : [this.backgroundColors[1].color, this.backgroundColors[3].color];
+        const circleColors = disabled ? [this.circleColors[0].color, this.circleColors[2].color] : [this.circleColors[1].color, this.circleColors[3].color];
         return (
-            <Touchable disabled={disabled} activeOpacity={1} onPress={this.onChange} style={[Switch.config.defaultSize, { height, width, borderRadius: height! / 2, ...margin }]}>
-                <View style={[styles.background, { backgroundColor: disabled ? this.backgroundColors[0].color : this.backgroundColors[1].color }]}>
+            <Touchable
+                disabled={disabled}
+                activeOpacity={1}
+                onPress={this.onChange}
+                style={[
+                    Switch.config.defaultSize,
+                    { height, width, borderRadius: height! / 2, backgroundColor: disabled ? this.backgroundColors[0].color : this.backgroundColors[1].color, ...margin }
+                ]}
+            >
+                <Animated.View
+                    style={[
+                        styles.movingView,
+                        {
+                            backgroundColor: this.state.mapValue.interpolate({
+                                inputRange: Switch.config.range,
+                                outputRange: backgroundColors
+                            }),
+                            width: this.state.innerWidth,
+                            borderRadius: height! / 2
+                        }
+                    ]}
+                >
                     <Animated.View
                         style={[
-                            styles.background,
+                            commonStyle.shadow,
+                            { width: circleSize, height: circleSize, borderRadius: circleSize! / 2 },
                             {
                                 backgroundColor: this.state.mapValue.interpolate({
                                     inputRange: Switch.config.range,
-                                    outputRange: backgroundColors
+                                    outputRange: circleColors
                                 }),
-                                width: this.state.innerWidth,
-                                alignItems: "flex-end"
+                                marginHorizontal: this.space
                             }
                         ]}
-                    >
-                        <Animated.View
-                            style={[
-                                commonStyle.shadow,
-                                { width: circleSize, height: circleSize, borderRadius: circleSize! / 2 },
-                                {
-                                    backgroundColor: this.state.mapValue.interpolate({
-                                        inputRange: Switch.config.range,
-                                        outputRange: circleColors
-                                    }),
-                                    marginHorizontal: this.space
-                                }
-                            ]}
-                        />
-                    </Animated.View>
-                </View>
+                    />
+                </Animated.View>
             </Touchable>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    background: {
+    movingView: {
         flex: 1,
-        justifyContent: "center",
-        borderRadius: 99
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center"
     }
 });
