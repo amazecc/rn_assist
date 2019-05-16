@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler } from "react-native";
+import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle, NativeEventSubscription, BackHandler, Keyboard } from "react-native";
 import { AnimatedView, AnimatedViewProps } from "./AnimatedView";
 import { PickOptional } from "component/utils/type";
 
@@ -38,14 +38,12 @@ export class Overlay extends React.PureComponent<OverlayProps> {
         }
     }
 
-    onStartShouldSetResponder = () => true;
-
     render() {
         const { onTriggerHide, style, contentContainerStyle, maskClosable, fadeWithMask, children, ...animatedViewProps } = this.props;
         const content = (
-            <View onStartShouldSetResponder={this.onStartShouldSetResponder} style={contentContainerStyle}>
+            <TouchableOpacity activeOpacity={1} onPress={Keyboard.dismiss} style={contentContainerStyle}>
                 {children}
-            </View>
+            </TouchableOpacity>
         );
         return (
             <React.Fragment>
