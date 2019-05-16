@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, TextInput } from "react-native";
 import { Box, Space } from "./Box";
 import { Modal, OverlayManager, toast, Touchable, Button, Switch, Spin, Input, Textarea } from "component";
 import { colors } from "component/utils/common";
@@ -9,6 +9,9 @@ interface State {
 }
 
 export default class App extends React.Component<any, State> {
+    private readonly inputRef: React.RefObject<TextInput> = React.createRef();
+    private readonly textareaRef: React.RefObject<TextInput> = React.createRef();
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -88,18 +91,20 @@ export default class App extends React.Component<any, State> {
                         <Spin visible={true} color={colors.blue} />
                     </Box>
                     <Box title="Input">
-                        <Input placeholder="请输入名称" style={{ width: "100%" }} />
+                        <Button text="第一个输入框获取焦点" onPress={() => this.inputRef.current!.focus()} />
+                        <Input ref={this.inputRef} placeholder="请输入名称" style={{ width: "100%" }} />
                         <Space />
                         <Input disabled value="disabled" style={{ width: "100%" }} />
                         <Space />
                         <Input value="中国" style={{ width: "100%" }} />
                     </Box>
                     <Box title="Textarea">
-                        <Textarea placeholder="请输入名称" style={{ width: "100%" }} />
+                        <Button text="第一个输入框获取焦点" onPress={() => this.textareaRef.current!.focus()} />
+                        <Textarea ref={this.textareaRef} placeholder="请输入名称" style={{ width: "100%" }} />
                         <Space />
                         <Textarea disabled value="disabled" style={{ width: "100%" }} />
                         <Space />
-                        <Textarea value="中国" style={{ width: "100%" }} />
+                        <Textarea value="中国" style={{ width: "100%", padding: 20 }} />
                     </Box>
                 </ScrollView>
                 <OverlayManager />

@@ -1,11 +1,16 @@
 import * as React from "react";
-import { StyleSheet, View, StyleProp, ViewStyle } from "react-native";
-import { Input, InputProps } from "./Input";
+import { StyleSheet, View, StyleProp, ViewStyle, TextInput } from "react-native";
+import { InputProps, InputForwardedRef } from "./Input";
 import { radius, colors } from "./utils/common";
+import { PickOptional } from "./utils/type";
 
 export interface TextareaProps extends InputProps {}
 
-export class Textarea extends React.PureComponent<TextareaProps> {
+class TextareaBase extends React.PureComponent<TextareaProps & InputForwardedRef> {
+    public static defaultProps: PickOptional<InputProps> = {
+        editable: true
+    };
+
     splitStyle() {
         const { style } = this.props;
         const containerStyle: StyleProp<ViewStyle> = {};
@@ -24,22 +29,34 @@ export class Textarea extends React.PureComponent<TextareaProps> {
     }
 
     render() {
-        const { disabled, style, ...resetInputProps } = this.props;
+        const { forwardedRef, disabled, editable, style, ...resetInputProps } = this.props;
         const { containerStyle, inputStyle } = this.splitStyle();
         return (
             <View style={[styles.container, disabled && styles.disabledContainer, containerStyle]}>
-                <Input {...resetInputProps} multiline textAlignVertical="top" disabled={disabled} style={[styles.input, inputStyle]} />
+                <TextInput
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    disableFullscreenUI
+                    underlineColorAndroid="transparent"
+                    {...resetInputProps}
+                    multiline
+                    textAlignVertical="top"
+                    editable={editable && !disabled}
+                    style={[styles.input, disabled && styles.inputDisabled, inputStyle]}
+                    ref={forwardedRef}
+                />
             </View>
         );
     }
 }
 
+export const Textarea = React.forwardRef((props: TextareaProps, ref: React.Ref<TextInput>) => <TextareaBase {...props} forwardedRef={ref} />);
+
 const styles = StyleSheet.create({
     container: {
         height: 150,
         backgroundColor: colors.gray,
-        paddingHorizontal: 6,
-        paddingVertical: 6,
+        padding: 6,
         borderRadius: radius.input,
         overflow: "hidden"
     },
@@ -53,5 +70,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
         backgroundColor: "transparent",
         borderRadius: 0
+    },
+    inputDisabled: {
+        backgroundColor: colors.grayDisabled
     }
 });
