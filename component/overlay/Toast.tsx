@@ -2,7 +2,6 @@ import * as React from "react";
 import { StyleSheet, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Overlay, OverlayProps } from "./Overlay";
 import { PickOptional } from "component/utils/type";
-import { commonStyle, radius } from "component/utils/common";
 
 export interface ToastProps extends OverlayProps {
     // default
@@ -18,7 +17,7 @@ export class Toast extends React.PureComponent<ToastProps> {
         delay: 2000
     };
 
-    private timer: NodeJS.Timeout | undefined;
+    private timer: number | undefined;
 
     componentDidMount() {
         const { delay, onTriggerHide } = this.props;

@@ -22,12 +22,12 @@ function add() {
 
 function prettier() {
     console.log("[Task: Format Code]".green);
-    runShell("prettier --config .prettierrc --write {app,component}/**/*.{ts,tsx}");
+    runShell("prettier --config .prettierrc.js --write {app,component}/**/*.{ts,tsx}");
 }
 
-function tslint() {
-    console.log("[Task: tsLint]".green);
-    runShell("tslint {app,component}/**/*.{ts,tsx}");
+function eslint() {
+    console.log("[Task: esLint]".green);
+    runShell("eslint app/**/* component/**/* index.js");
 }
 
 function checkTypescriptCode() {
@@ -39,7 +39,7 @@ function run() {
     add();
     prettier();
     checkTypescriptCode();
-    tslint();
+    eslint();
 }
 
 run();

@@ -30,7 +30,7 @@ export class AnimatedView extends React.PureComponent<AnimatedViewProps, State> 
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<AnimatedViewProps>, prevState: Readonly<State>) {
+    componentDidUpdate(prevProps: Readonly<AnimatedViewProps>) {
         const { visible } = this.props;
         if (prevProps.visible !== visible) {
             this.setState({ visible: false });

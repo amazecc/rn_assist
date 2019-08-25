@@ -1,4 +1,4 @@
-package com.rn_assist;
+package com.rndemo;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "rn_assist";
+        return "rndemo";
     }
 }

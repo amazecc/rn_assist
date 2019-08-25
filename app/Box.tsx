@@ -1,14 +1,14 @@
 import * as React from "react";
 import { View, Text, StyleSheet, Platform } from "react-native";
 
-export const Box: React.FunctionComponent<{ title: string }> = props => (
+export const Box: React.SFC<{ title: string }> = props => (
     <View style={styles.boxContainer}>
         <Text style={styles.title}>{props.title}</Text>
         <View style={styles.box}>{props.children}</View>
     </View>
 );
 
-export const Space: React.FunctionComponent = () => <View style={styles.space} />;
+export const Space: React.SFC = () => <View style={styles.space} />;
 
 const styles = StyleSheet.create({
     boxContainer: {

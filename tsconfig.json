@@ -1,22 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "react",
-    "lib": ["esnext"],
-    "noEmit": true,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "downlevelIteration": true,
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "component/*": ["./component/*"],
-      "app/*": ["./app/*"],
-    }
-  },
-  "include": ["app", "component", "script"]
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "lib": ["esnext", "dom"],
+        "noEmit": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "downlevelIteration": true,
+        "strict": true,
+        "baseUrl": ".",
+        "paths": {
+            "component/*": ["./component/*"],
+            "app/*": ["./app/*"]
+        }
+    },
+    "include": ["app"],
+    "exclude": ["node_modules"]
 }

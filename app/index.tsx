@@ -4,15 +4,17 @@ import { Box, Space } from "./Box";
 import { Modal, OverlayManager, toast, Touchable, Button, Switch, Spin, Input, Textarea } from "component";
 import { colors } from "component/utils/common";
 
+interface Props {}
+
 interface State {
     switchValue: boolean;
 }
 
-export default class App extends React.Component<any, State> {
+export default class App extends React.Component<Props, State> {
     private readonly inputRef: React.RefObject<TextInput> = React.createRef();
     private readonly textareaRef: React.RefObject<TextInput> = React.createRef();
 
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             switchValue: false
