@@ -8,3 +8,5 @@ export function memoize<T>(fn: (...parameters: any[]) => T, cacheKey: string) {
         return cache[cacheKey];
     };
 }
+
+export const uuid = () => Date.now().toString(16) + Math.floor(Math.random() * 100000000).toString(16);

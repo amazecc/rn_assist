@@ -1,6 +1,7 @@
 import * as React from "react";
 import { OverlayProps, Overlay } from "./Overlay";
 import { commonStyle } from "component/utils/common";
+import { uuid } from "component/utils/utils";
 import { Toast, ToastProps } from "./Toast";
 
 export type OverlayConfig = Pick<OverlayProps, "maskClosable" | "animations" | "duration" | "style" | "contentContainerStyle" | "fadeWithMask">;
@@ -24,7 +25,7 @@ let instance: OverlayManager | null = null;
 export class OverlayManager extends React.PureComponent<any, State> {
     public static pushOverlay(children: React.ReactElement, overlayConfig?: OverlayConfig) {
         const instance = OverlayManager.getInstance();
-        const id = instance.createID();
+        const id = uuid();
         const destroy = () => instance.triggerHideItem("overlay", id);
         const newItem = instance.createItem(id, Overlay, {
             ...overlayConfig,
@@ -44,7 +45,7 @@ export class OverlayManager extends React.PureComponent<any, State> {
 
     public static pushToast(children: React.ReactElement | React.ReactText, toastConfig?: ToastConfig) {
         const instance = OverlayManager.getInstance();
-        const id = instance.createID();
+        const id = uuid();
         const newItem = instance.createItem(id, Toast, {
             ...toastConfig,
             visible: true,
@@ -53,14 +54,13 @@ export class OverlayManager extends React.PureComponent<any, State> {
             onTriggerHide: () => instance.triggerHideItem("toast", id),
             children
         });
-        instance.setState(prevState => ({
-            toasts: [...prevState.toasts, newItem]
-        }));
+        instance.setState(prevState => ({ toasts: [...prevState.toasts, newItem] }));
     }
 
     public static pop() {
         const instance = OverlayManager.getInstance();
-        const lastOverlay = instance.state.overlays[instance.state.overlays.length - 1];
+        const { overlays } = instance.state;
+        const lastOverlay = [...overlays].reverse().find(_ => _.props.visible);
         if (lastOverlay) {
             lastOverlay.props.onTriggerHide();
         }
@@ -119,10 +119,6 @@ export class OverlayManager extends React.PureComponent<any, State> {
             overlays: type === "overlay" ? newItems : overlays,
             toasts: type === "toast" ? newItems : toasts
         });
-    }
-
-    createID() {
-        return Date.now().toString(16);
     }
 
     render() {
